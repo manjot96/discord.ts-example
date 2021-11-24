@@ -22,4 +22,22 @@ export abstract class SlashExample {
     const pagination = new Pagination(interaction, pages);
     await pagination.send();
   }
+
+  @Slash("all-test", { description: "Pagination for all slash command" })
+  async test(interaction: CommandInteraction): Promise<void> {
+    const commands = MetadataStorage.instance.applicationCommands.map((cmd) => {
+      return { name: cmd.name, description: cmd.description };
+    });
+
+    const pages = commands.map((cmd, i) => {
+      return new MessageEmbed()
+        .setFooter(`Page ${i + 1} of ${commands.length}`)
+        .setTitle("**Slash command info**")
+        .addField("Name", cmd.name)
+        .addField("Description", cmd.description);
+    });
+
+    const pagination = new Pagination(interaction, pages);
+    await pagination.send();
+  }
 }
